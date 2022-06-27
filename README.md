@@ -1,6 +1,6 @@
-# Pangolin API
+# QuackSwap API
 
-API for querying key values for Pangolin and the PNG token
+API for querying key values for QuackSwap and the QUACK token
 
 ## Development
 
@@ -10,117 +10,117 @@ Anyone can develop this repository locally. Fill in `account_id` in the `wrangle
 
 ## Location
 
-The API is available at `https://api.pangolin.exchange`
+The API is available at `https://api.quackswap.exchange`
 
 ## Methods
 
 All methods accept a GET request.
 
-### Pangolin TVL
+### QuackSwap TVL
 
-Get the total value locked in Pangolin in USD.
+Get the total value locked in QuackSwap in USD.
 
-Endpoint: `/png/tvl`
+Endpoint: `/quack/tvl`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/tvl'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/tvl'`
 
-### Pangolin Volume
+### QuackSwap Volume
 
-Get the total lifetime volume of swaps on Pangolin in USD.
+Get the total lifetime volume of swaps on QuackSwap in USD.
 
-Endpoint: `/png/total-volume`
+Endpoint: `/quack/total-volume`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/total-volume'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/total-volume'`
 
-### PNG Total Supply
+### QUACK Total Supply
 
-Get the total lifetime supply of PNG. PNG is a hard-capped asset and this value will never increase.
-
-#### 18 Decimal Denomination
-
-The PNG token has 18 decimals. Query the total supply denominated in units of "wei." With this method, a result of 1 PNG would return the value `1000000000000000000`.
-
-Endpoint: `/png/total-supply`
-
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/total-supply'`
-
-#### Whole Token Denomination
-
-The PNG token has 18 decimals. Query the total supply denominated in units of whole PNG. With this method, a result of 1 PNG would return the value `1`.
-
-Endpoint: `/png/total-supply-whole`
-
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/total-supply-whole'`
-
-### PNG Circulating Supply
-
-Get the current circulating supply of PNG. This value is calculated to be the total supply of PNG minus the locked, unvested PNG and also excludes the locked Pangolin community treasury.
+Get the total lifetime supply of QUACK. QUACK is a hard-capped asset and this value will never increase.
 
 #### 18 Decimal Denomination
 
-The PNG token has 18 decimals. Query the circulating supply denominated in units of "wei." With this method, a result of 1 PNG would return the value `1000000000000000000`.
+The QUACK token has 18 decimals. Query the total supply denominated in units of "wei." With this method, a result of 1 QUACK would return the value `1000000000000000000`.
 
-Endpoint: `/png/circulating-supply`
+Endpoint: `/quack/total-supply`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/circulating-supply'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/total-supply'`
 
 #### Whole Token Denomination
 
-The PNG token has 18 decimals. Query the circulating supply denominated in units of whole PNG. With this method, a result of 1 PNG would return the value `1`.
+The QUACK token has 18 decimals. Query the total supply denominated in units of whole QUACK. With this method, a result of 1 QUACK would return the value `1`.
 
-Endpoint: `/png/circulating-supply-whole`
+Endpoint: `/quack/total-supply-whole`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/circulating-supply-whole'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/total-supply-whole'`
 
-### Pangolin Community Treasury Supply
+### QUACK Circulating Supply
 
-Get the current PNG supply of the Pangolin Community Treasury.
+Get the current circulating supply of QUACK. This value is calculated to be the total supply of QUACK minus the locked, unvested QUACK and also excludes the locked QuackSwap community treasury.
 
 #### 18 Decimal Denomination
 
-The PNG token has 18 decimals. Query the balance denominated in units of "wei." With this method, a result of 1 PNG would return the value `1000000000000000000`.
+The QUACK token has 18 decimals. Query the circulating supply denominated in units of "wei." With this method, a result of 1 QUACK would return the value `1000000000000000000`.
 
-Endpoint: `/png/community-treasury`
+Endpoint: `/quack/circulating-supply`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/community-treasury'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/circulating-supply'`
 
 #### Whole Token Denomination
 
-The PNG token has 18 decimals. Query the circulating supply denominated in units of whole PNG. With this method, a result of 1 PNG would return the value `1`.
+The QUACK token has 18 decimals. Query the circulating supply denominated in units of whole QUACK. With this method, a result of 1 QUACK would return the value `1`.
 
-Endpoint: `/png/community-treasury-whole`
+Endpoint: `/quack/circulating-supply-whole`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/png/community-treasury-whole'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/circulating-supply-whole'`
 
-### Pangolin Number of Address
+### QuackSwap Community Treasury Supply
 
-Get the total lifetime number of unique address to transact on Pangolin.
+Get the current QUACK supply of the QuackSwap Community Treasury.
 
-Endpoint: `/pangolin/addresses`
+#### 18 Decimal Denomination
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/pangolin/addresses'`
+The QUACK token has 18 decimals. Query the balance denominated in units of "wei." With this method, a result of 1 QUACK would return the value `1000000000000000000`.
 
-### Pangolin Average Swap Size
+Endpoint: `/quack/community-treasury`
 
-Get the average size of each swap on Pangolin in USD.
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/community-treasury'`
 
-Endpoint: `/pangolin/transaction-average`
+#### Whole Token Denomination
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/pangolin/transaction-average'`
+The QUACK token has 18 decimals. Query the circulating supply denominated in units of whole QUACK. With this method, a result of 1 QUACK would return the value `1`.
 
-### Pangolin Median Swap Size
+Endpoint: `/quack/community-treasury-whole`
 
-Get the median size of each swap on Pangolin in USD.
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quack/community-treasury-whole'`
 
-Endpoint: `/pangolin/transaction-median`
+### QuackSwap Number of Address
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/pangolin/transaction-median'`
+Get the total lifetime number of unique address to transact on QuackSwap.
 
-### Pangolin Average Percentage Reward Rate
+Endpoint: `/quackswap/addresses`
 
-Get the PNG Reward Rate of the inputted StakingRewards contract address.
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quackswap/addresses'`
+
+### QuackSwap Average Swap Size
+
+Get the average size of each swap on QuackSwap in USD.
+
+Endpoint: `/quackswap/transaction-average`
+
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quackswap/transaction-average'`
+
+### QuackSwap Median Swap Size
+
+Get the median size of each swap on QuackSwap in USD.
+
+Endpoint: `/quackswap/transaction-median`
+
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quackswap/transaction-median'`
+
+### QuackSwap Average Percentage Reward Rate
+
+Get the QUACK Reward Rate of the inputted StakingRewards contract address.
 Refer to [Snowtrace](https://snowtrace.io/address/0x1f806f7C8dED893fd3caE279191ad7Aa3798E928#readContract) to find pIDs(pool ids).
 
-Endpoint: `/pangolin/apr2/{pID}`
+Endpoint: `/quackswap/apr2/{pID}`
 
-Example call: `curl --location --request GET 'https://api.pangolin.exchange/pangolin/apr2/1'`
+Example call: `curl --location --request GET 'https://api.quackswap.exchange/quackswap/apr2/1'`

@@ -6,70 +6,70 @@ describe('/', (it) => {
     const {statusCode, data, headers} = await get('/');
 
     assert.is(statusCode, 200);
-    assert.is(data, 'Refer to https://github.com/pangolindex/pangolin-api for documentation.');
+    assert.is(data, 'Refer to https://github.com/quackswapdex/quackswap-api for documentation.');
     assert.is(headers['cache-control'], 'public,s-maxage=31536000,immutable');
   });
 });
 
-describe('/png', (it) => {
-  it('/png/tvl', async () => {
-    const {statusCode, data, headers} = await get('/png/tvl');
+describe('/quack', (it) => {
+  it('/quack/tvl', async () => {
+    const {statusCode, data, headers} = await get('/quack/tvl');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=300');
   });
 
-  it('/png/total-volume', async () => {
-    const {statusCode, data, headers} = await get('/png/total-volume');
+  it('/quack/total-volume', async () => {
+    const {statusCode, data, headers} = await get('/quack/total-volume');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=300');
   });
 
-  it('/png/total-supply', async () => {
-    const {statusCode, data, headers} = await get('/png/total-supply');
+  it('/quack/total-supply', async () => {
+    const {statusCode, data, headers} = await get('/quack/total-supply');
 
     assert.is(statusCode, 200);
     assert.is(data, '230000000000000000000000000');
     assert.is(headers['cache-control'], 'public,s-maxage=31536000,immutable');
   });
 
-  it('/png/total-supply-whole', async () => {
-    const {statusCode, data, headers} = await get('/png/total-supply-whole');
+  it('/quack/total-supply-whole', async () => {
+    const {statusCode, data, headers} = await get('/quack/total-supply-whole');
 
     assert.is(statusCode, 200);
     assert.is(data, '230000000');
     assert.is(headers['cache-control'], 'public,s-maxage=31536000,immutable');
   });
 
-  it('/png/circulating-supply', async () => {
-    const {statusCode, data, headers} = await get('/png/circulating-supply');
+  it('/quack/circulating-supply', async () => {
+    const {statusCode, data, headers} = await get('/quack/circulating-supply');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it('/png/circulating-supply-whole', async () => {
-    const {statusCode, data, headers} = await get('/png/circulating-supply-whole');
+  it('/quack/circulating-supply-whole', async () => {
+    const {statusCode, data, headers} = await get('/quack/circulating-supply-whole');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it('/png/community-treasury', async () => {
-    const {statusCode, data, headers} = await get('/png/community-treasury');
+  it('/quack/community-treasury', async () => {
+    const {statusCode, data, headers} = await get('/quack/community-treasury');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=3600');
   });
 
-  it('/png/community-treasury-whole', async () => {
-    const {statusCode, data, headers} = await get('/png/community-treasury-whole');
+  it('/quack/community-treasury-whole', async () => {
+    const {statusCode, data, headers} = await get('/quack/community-treasury-whole');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
@@ -77,65 +77,65 @@ describe('/png', (it) => {
   });
 });
 
-describe('/v2/:chain/png', (it) => {
-  it('/v2/43114/png/tvl', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/tvl');
+describe('/v2/:chain/quack', (it) => {
+  it('/v2/43114/quack/tvl', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/tvl');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=300');
   });
 
-  it('/v2/43114/png/total-volume', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/total-volume');
+  it('/v2/43114/quack/total-volume', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/total-volume');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=300');
   });
 
-  it('/v2/43114/png/total-supply', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/total-supply');
+  it('/v2/43114/quack/total-supply', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/total-supply');
 
     assert.is(statusCode, 200);
     assert.is(data, '230000000000000000000000000');
     assert.is(headers['cache-control'], 'public,s-maxage=31536000,immutable');
   });
 
-  it('/v2/43114/png/total-supply-whole', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/total-supply-whole');
+  it('/v2/43114/quack/total-supply-whole', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/total-supply-whole');
 
     assert.is(statusCode, 200);
     assert.is(data, '230000000');
     assert.is(headers['cache-control'], 'public,s-maxage=31536000,immutable');
   });
 
-  it('/v2/43114/png/circulating-supply', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/circulating-supply');
+  it('/v2/43114/quack/circulating-supply', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/circulating-supply');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it('/v2/43114/png/circulating-supply-whole', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/circulating-supply-whole');
+  it('/v2/43114/quack/circulating-supply-whole', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/circulating-supply-whole');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it('/v2/43114/png/community-treasury', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/community-treasury');
+  it('/v2/43114/quack/community-treasury', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/community-treasury');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
     assert.is(headers['cache-control'], 'public,s-maxage=3600');
   });
 
-  it('/v2/43114/png/community-treasury-whole', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/png/community-treasury-whole');
+  it('/v2/43114/quack/community-treasury-whole', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quack/community-treasury-whole');
 
     assert.is(statusCode, 200);
     assert.match(data, /^\d+/);
@@ -143,10 +143,10 @@ describe('/v2/:chain/png', (it) => {
   });
 });
 
-describe('/pangolin', (it) => {
+describe('/quackswap', (it) => {
   // Timeout issues
-  // it('/pangolin/addresses', async () => {
-  //   const {statusCode, data, headers} = await get('/pangolin/addresses', {
+  // it('/quackswap/addresses', async () => {
+  //   const {statusCode, data, headers} = await get('/quackswap/addresses', {
   //     timeout: 60_000,
   //   });
   //
@@ -155,17 +155,17 @@ describe('/pangolin', (it) => {
   //   assert.is(headers['cache-control'], 'public,s-maxage=86400');
   // });
 
-  it('/pangolin/transaction-average', async () => {
-    const {statusCode, data, headers} = await get('/pangolin/transaction-average');
+  it('/quackswap/transaction-average', async () => {
+    const {statusCode, data, headers} = await get('/quackswap/transaction-average');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it(`/pangolin/apr/:address`, async () => {
+  it(`/quackswap/apr/:address`, async () => {
     const {statusCode, data, headers} = await get(
-      '/pangolin/apr/0x1f806f7c8ded893fd3cae279191ad7aa3798e928',
+      '/quackswap/apr/0x1f806f7c8ded893fd3cae279191ad7aa3798e928',
     );
 
     assert.is(statusCode, 200);
@@ -175,8 +175,8 @@ describe('/pangolin', (it) => {
     assert.is(headers['content-type'], 'application/json;charset=utf-8');
   });
 
-  it(`/pangolin/apr2/:pid`, async () => {
-    const {statusCode, data, headers} = await get(`/pangolin/apr2/0`);
+  it(`/quackswap/apr2/:pid`, async () => {
+    const {statusCode, data, headers} = await get(`/quackswap/apr2/0`);
 
     assert.is(statusCode, 200);
     assert.ok(data.swapFeeApr !== undefined);
@@ -186,10 +186,10 @@ describe('/pangolin', (it) => {
   });
 });
 
-describe('/v2/:chain/pangolin', (it) => {
+describe('/v2/:chain/quackswap', (it) => {
   // Timeout issues
-  // it('/v2/43114/pangolin/addresses', async () => {
-  //   const {statusCode, data, headers} = await get('/v2/43114/pangolin/addresses', {
+  // it('/v2/43114/quackswap/addresses', async () => {
+  //   const {statusCode, data, headers} = await get('/v2/43114/quackswap/addresses', {
   //     timeout: 60_000,
   //   });
   //
@@ -198,16 +198,16 @@ describe('/v2/:chain/pangolin', (it) => {
   //   assert.is(headers['cache-control'], 'public,s-maxage=86400');
   // });
 
-  it('/v2/43114/pangolin/transaction-average', async () => {
-    const {statusCode, data, headers} = await get('/v2/43114/pangolin/transaction-average');
+  it('/v2/43114/quackswap/transaction-average', async () => {
+    const {statusCode, data, headers} = await get('/v2/43114/quackswap/transaction-average');
 
     assert.is(statusCode, 200);
     assert.match(data, /^[.?\d]+/);
     assert.is(headers['cache-control'], 'public,s-maxage=86400');
   });
 
-  it(`/v2/43114/pangolin/apr/:pid`, async () => {
-    const {statusCode, data, headers} = await get(`/v2/43114/pangolin/apr/0`);
+  it(`/v2/43114/quackswap/apr/:pid`, async () => {
+    const {statusCode, data, headers} = await get(`/v2/43114/quackswap/apr/0`);
 
     assert.is(statusCode, 200);
     assert.ok(data.swapFeeApr !== undefined);
@@ -216,10 +216,10 @@ describe('/v2/:chain/pangolin', (it) => {
     assert.is(headers['content-type'], 'application/json;charset=utf-8');
   });
 
-  it(`/v2/43114/pangolin/aprs/:pids`, async () => {
+  it(`/v2/43114/quackswap/aprs/:pids`, async () => {
     const pids = [0, 1, 2, 3];
 
-    const {statusCode, data, headers} = await get(`/v2/43114/pangolin/aprs/${pids.join(',')}`);
+    const {statusCode, data, headers} = await get(`/v2/43114/quackswap/aprs/${pids.join(',')}`);
 
     assert.is(statusCode, 200);
     assert.equal(data.length, pids.length);

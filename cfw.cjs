@@ -4,9 +4,9 @@
  * @type {import('cfw').Config}
  */
 module.exports = {
-  name: 'pangolin-api',
+  name: 'quackswap-api',
   entry: 'index.ts',
-  routes: ['api.pangolin.exchange/*'],
+  routes: ['api.quackswap.exchange/*'],
   usage: "bundled",
   module: false,
 };

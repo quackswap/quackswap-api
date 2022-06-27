@@ -54,7 +54,7 @@ export const average: Handler = async (_, context) => {
     QUERIES._FACTORY(chainInfo.factory),
     chainInfo.subgraph_exchange,
   );
-  const {totalVolumeUSD, txCount} = result.pangolinFactories[0];
+  const {totalVolumeUSD, txCount} = result.quackswapFactories[0];
 
   const text = (Number.parseFloat(totalVolumeUSD) / Number.parseInt(txCount, 10)).toFixed(2);
 
@@ -99,7 +99,7 @@ export const aprChef: Handler = async (_, context) => {
     const [
       {pairDayDatas},
       avaxPriceString,
-      derivedPngString,
+      derivedQuackString,
       pairValueUSD,
       [token0, token1],
       rewardPerSecond,
@@ -118,8 +118,8 @@ export const aprChef: Handler = async (_, context) => {
       // AVAX price in terms of USD
       getETHPrice(chainInfo.subgraph_exchange),
 
-      // PNG price in terms of AVAX
-      getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.png),
+      // QUACK price in terms of AVAX
+      getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.quack),
 
       // Get pool USD reserve value
       getPairPriceUSD(chainInfo.subgraph_exchange, stakingTokenAddress),
@@ -145,12 +145,12 @@ export const aprChef: Handler = async (_, context) => {
     ]);
 
     const avaxPrice = convertStringToBigNumber(avaxPriceString, 0, 18);
-    const pngPrice = convertStringToBigNumber(derivedPngString, 0, 18)
+    const quackPrice = convertStringToBigNumber(derivedQuackString, 0, 18)
       .mul(avaxPrice)
       .div(ONE_TOKEN);
 
     // Process additional SuperFarm rewards
-    let extraRewardTokensPerSecondInPNG = ZERO;
+    let extraRewardTokensPerSecondInQUACK = ZERO;
     if (rewarderAddress !== ZERO_ADDRESS) {
       const [superFarmRewardTokens, [, superFarmMultipliers]] = await Promise.all<string[], Result>(
         [
@@ -164,7 +164,7 @@ export const aprChef: Handler = async (_, context) => {
         ],
       );
 
-      const [rewardDecimals, rewardTokenPricesInPNG] = await Promise.all<BigNumber[], BigNumber[]>([
+      const [rewardDecimals, rewardTokenPricesInQUACK] = await Promise.all<BigNumber[], BigNumber[]>([
         Promise.all<BigNumber>(
           superFarmRewardTokens.map(async (address: string) => getDecimals(chainInfo.rpc, address)),
         ),
@@ -172,7 +172,7 @@ export const aprChef: Handler = async (_, context) => {
           superFarmRewardTokens.map(async (address: string) => { // eslint-disable-line
             return getTokenPriceETH(chainInfo.subgraph_exchange, address).then(
               (derivedAVAX: string) =>
-                convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(pngPrice),
+                convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(quackPrice),
             );
           }),
         ),
@@ -184,42 +184,42 @@ export const aprChef: Handler = async (_, context) => {
           .div(totalAllocPoints)
           .mul(superFarmMultipliers[i])
           .div(ONE_TOKEN)
-          .mul(rewardTokenPricesInPNG[i])
+          .mul(rewardTokenPricesInQUACK[i])
           .div(ONE_TOKEN);
 
-        const rewardPerSecInPNG = expandTo18Decimals(rewardPerSecInReward, rewardDecimals[i]);
-        extraRewardTokensPerSecondInPNG = extraRewardTokensPerSecondInPNG.add(rewardPerSecInPNG);
+        const rewardPerSecInQUACK = expandTo18Decimals(rewardPerSecInReward, rewardDecimals[i]);
+        extraRewardTokensPerSecondInQUACK = extraRewardTokensPerSecondInQUACK.add(rewardPerSecInQUACK);
       }
     }
 
-    let stakedPNG: BigNumber;
-    if ([token0, token1].includes(chainInfo.png.toLowerCase())) {
-      const halfPairValueInPNG: BigNumber = await getBalance(
+    let stakedQUACK: BigNumber;
+    if ([token0, token1].includes(chainInfo.quack.toLowerCase())) {
+      const halfPairValueInQUACK: BigNumber = await getBalance(
         chainInfo.rpc,
-        chainInfo.png,
+        chainInfo.quack,
         stakingTokenAddress,
       );
-      stakedPNG = halfPairValueInPNG.mul(2).mul(pglStaked).div(pglTotalSupply);
+      stakedQUACK = halfPairValueInQUACK.mul(2).mul(pglStaked).div(pglTotalSupply);
     } else {
-      const pairValueInPNG: BigNumber = convertStringToBigNumber(pairValueUSD, 0, 18)
+      const pairValueInQUACK: BigNumber = convertStringToBigNumber(pairValueUSD, 0, 18)
         .mul(ONE_TOKEN)
-        .div(pngPrice);
-      stakedPNG = pairValueInPNG.mul(pglStaked).div(pglTotalSupply);
+        .div(quackPrice);
+      stakedQUACK = pairValueInQUACK.mul(pglStaked).div(pglTotalSupply);
     }
 
-    const poolRewardPerSecInPNG: BigNumber = (rewardPerSecond as BigNumber)
+    const poolRewardPerSecInQUACK: BigNumber = (rewardPerSecond as BigNumber)
       .mul(poolInfo.allocPoint)
       .div(totalAllocPoints);
-    const stakingAPR: BigNumber = stakedPNG.isZero()
+    const stakingAPR: BigNumber = stakedQUACK.isZero()
       ? ZERO
-      : poolRewardPerSecInPNG
-          .add(extraRewardTokensPerSecondInPNG)
+      : poolRewardPerSecInQUACK
+          .add(extraRewardTokensPerSecondInQUACK)
           // Percentage
           .mul(100)
           // Calculate reward rate per year
           .mul(60 * 60 * 24 * 365)
           // Divide by amount staked to get APR
-          .div(stakedPNG);
+          .div(stakedQUACK);
 
     let swapVolumeUSD = ZERO;
     let liquidityUSD = ZERO;
@@ -261,7 +261,7 @@ export const aprChefMultiple: Handler = async (_, context) => {
   // Singular data
   const [
     _avaxPriceString,
-    _derivedPngString,
+    _derivedQuackString,
     _lpTokens,
     poolInfos,
     rewardPerSecond,
@@ -270,8 +270,8 @@ export const aprChefMultiple: Handler = async (_, context) => {
     // Variable: _avaxPriceString
     getETHPrice(chainInfo.subgraph_exchange),
 
-    // Variable: _derivedPngString
-    getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.png),
+    // Variable: _derivedQuackString
+    getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.quack),
 
     // Variable: _lpTokens
     getStakingTokenAddressesFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
@@ -288,7 +288,7 @@ export const aprChefMultiple: Handler = async (_, context) => {
 
   // Format singular data
   const avaxPrice: BigNumber = convertStringToBigNumber(_avaxPriceString, 0, 18);
-  const pngPrice: BigNumber = convertStringToBigNumber(_derivedPngString, 0, 18)
+  const quackPrice: BigNumber = convertStringToBigNumber(_derivedQuackString, 0, 18)
     .mul(avaxPrice)
     .div(ONE_TOKEN);
   const lpTokens: string[] = _lpTokens[0];
@@ -330,7 +330,7 @@ export const aprChefMultiple: Handler = async (_, context) => {
       ]);
 
       // Process additional SuperFarm rewards
-      let extraRewardTokensPerSecondInPNG = ZERO;
+      let extraRewardTokensPerSecondInQUACK = ZERO;
       if (rewarderAddress !== ZERO_ADDRESS) {
         const [superFarmRewardTokens, [, superFarmMultipliers]] = await Promise.all<
           string[],
@@ -345,7 +345,7 @@ export const aprChefMultiple: Handler = async (_, context) => {
           ),
         ]);
 
-        const [rewardDecimals, rewardTokenPricesInPNG] = await Promise.all<BigNumber[]>([
+        const [rewardDecimals, rewardTokenPricesInQUACK] = await Promise.all<BigNumber[]>([
           Promise.all<BigNumber>(
             superFarmRewardTokens.map(async (address: string) =>
               getDecimals(chainInfo.rpc, address),
@@ -355,7 +355,7 @@ export const aprChefMultiple: Handler = async (_, context) => {
             superFarmRewardTokens.map(async (address: string) => { // eslint-disable-line
               return getTokenPriceETH(chainInfo.subgraph_exchange, address).then(
                 (derivedAVAX: string) =>
-                  convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(pngPrice),
+                  convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(quackPrice),
               );
             }),
           ),
@@ -367,42 +367,42 @@ export const aprChefMultiple: Handler = async (_, context) => {
             .div(totalAllocPoints)
             .mul(superFarmMultipliers[j])
             .div(ONE_TOKEN)
-            .mul(rewardTokenPricesInPNG[j])
+            .mul(rewardTokenPricesInQUACK[j])
             .div(ONE_TOKEN);
 
-          const rewardPerSecInPNG = expandTo18Decimals(rewardPerSecInReward, rewardDecimals[j]);
-          extraRewardTokensPerSecondInPNG = extraRewardTokensPerSecondInPNG.add(rewardPerSecInPNG);
+          const rewardPerSecInQUACK = expandTo18Decimals(rewardPerSecInReward, rewardDecimals[j]);
+          extraRewardTokensPerSecondInQUACK = extraRewardTokensPerSecondInQUACK.add(rewardPerSecInQUACK);
         }
       }
 
-      let stakedPNG: BigNumber;
-      if ([token0, token1].includes(chainInfo.png.toLowerCase())) {
-        const halfPairValueInPNG: BigNumber = await getBalance(
+      let stakedQUACK: BigNumber;
+      if ([token0, token1].includes(chainInfo.quack.toLowerCase())) {
+        const halfPairValueInQUACK: BigNumber = await getBalance(
           chainInfo.rpc,
-          chainInfo.png,
+          chainInfo.quack,
           stakingTokenAddress,
         );
-        stakedPNG = halfPairValueInPNG.mul(2).mul(pglStaked).div(pglTotalSupply);
+        stakedQUACK = halfPairValueInQUACK.mul(2).mul(pglStaked).div(pglTotalSupply);
       } else {
-        const pairValueInPNG: BigNumber = convertStringToBigNumber(pairValueUSD, 0, 18)
+        const pairValueInQUACK: BigNumber = convertStringToBigNumber(pairValueUSD, 0, 18)
           .mul(ONE_TOKEN)
-          .div(pngPrice);
-        stakedPNG = pairValueInPNG.mul(pglStaked).div(pglTotalSupply);
+          .div(quackPrice);
+        stakedQUACK = pairValueInQUACK.mul(pglStaked).div(pglTotalSupply);
       }
 
-      const poolRewardPerSecInPNG: BigNumber = rewardPerSecond
+      const poolRewardPerSecInQUACK: BigNumber = rewardPerSecond
         .mul(poolInfos[Number.parseInt(poolId, 10)].allocPoint)
         .div(totalAllocPoints);
-      const stakingAPR: BigNumber = stakedPNG.isZero()
+      const stakingAPR: BigNumber = stakedQUACK.isZero()
         ? ZERO
-        : poolRewardPerSecInPNG
-            .add(extraRewardTokensPerSecondInPNG)
+        : poolRewardPerSecInQUACK
+            .add(extraRewardTokensPerSecondInQUACK)
             // Percentage
             .mul(100)
             // Calculate reward rate per year
             .mul(60 * 60 * 24 * 365)
             // Divide by amount staked to get APR
-            .div(stakedPNG);
+            .div(stakedQUACK);
 
       let swapVolumeUSD = ZERO;
       let liquidityUSD = ZERO;

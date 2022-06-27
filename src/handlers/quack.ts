@@ -15,7 +15,7 @@ export const tvl: Handler = async (_, context) => {
     chainInfo.subgraph_exchange,
   );
 
-  const text = Number.parseFloat(result.pangolinFactories[0].totalLiquidityUSD).toFixed(2);
+  const text = Number.parseFloat(result.quackswapFactories[0].totalLiquidityUSD).toFixed(2);
 
   return send(200, text, {
     'Cache-Control': 'public,s-maxage=300',
@@ -30,7 +30,7 @@ export const volume: Handler = async (_, context) => {
     chainInfo.subgraph_exchange,
   );
 
-  const text = Number.parseFloat(result.pangolinFactories[0].totalVolumeUSD).toFixed(2);
+  const text = Number.parseFloat(result.quackswapFactories[0].totalVolumeUSD).toFixed(2);
 
   return send(200, text, {
     'Cache-Control': 'public,s-maxage=300',
@@ -46,7 +46,7 @@ export const supply: Handler = async (_, context) => {
     // Override Avalanche total supply to account for TreasuryVesterProxy logical burns
     text = ONE_TOKEN.mul(230_000_000).toString();
   } else {
-    const totalSupply = await getTotalSupply(chainInfo.rpc, chainInfo.png);
+    const totalSupply = await getTotalSupply(chainInfo.rpc, chainInfo.quack);
     text = totalSupply.toString();
   }
 
@@ -64,7 +64,7 @@ export const supplyWhole: Handler = async (_, context) => {
     // Override Avalanche total supply to account for TreasuryVesterProxy logical burns
     text = BigNumber.from(230_000_000).toString();
   } else {
-    const totalSupply = await getTotalSupply(chainInfo.rpc, chainInfo.png);
+    const totalSupply = await getTotalSupply(chainInfo.rpc, chainInfo.quack);
     text = totalSupply.div(ONE_TOKEN).toString();
   }
 
@@ -81,13 +81,13 @@ export const circulating: Handler = async (_, context) => {
   if (chainInfo.chainId === '43114') {
     // Override Avalanche circulating supply to account for TreasuryVesterProxy logical burns
     text = ONE_TOKEN.mul(538_000_000)
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.treasury_vester))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.treasury_vester))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury))
       .toString();
   } else {
-    text = (await getTotalSupply(chainInfo.rpc, chainInfo.png))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.treasury_vester))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury))
+    text = (await getTotalSupply(chainInfo.rpc, chainInfo.quack))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.treasury_vester))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury))
       .toString();
   }
 
@@ -104,14 +104,14 @@ export const circulatingWhole: Handler = async (_, context) => {
   if (chainInfo.chainId === '43114') {
     // Override Avalanche circulating supply to account for TreasuryVesterProxy logical burns
     text = ONE_TOKEN.mul(538_000_000)
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.treasury_vester))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.treasury_vester))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury))
       .div(ONE_TOKEN)
       .toString();
   } else {
-    text = (await getTotalSupply(chainInfo.rpc, chainInfo.png))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.treasury_vester))
-      .sub(await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury))
+    text = (await getTotalSupply(chainInfo.rpc, chainInfo.quack))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.treasury_vester))
+      .sub(await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury))
       .div(ONE_TOKEN)
       .toString();
   }
@@ -124,7 +124,7 @@ export const circulatingWhole: Handler = async (_, context) => {
 export const treasury: Handler = async (_, context) => {
   const chainInfo = getChainInfo(context.params.chain);
 
-  const balance = await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury);
+  const balance = await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury);
   const text = balance.toString();
 
   return send(200, text, {
@@ -135,7 +135,7 @@ export const treasury: Handler = async (_, context) => {
 export const treasuryWhole: Handler = async (_, context) => {
   const chainInfo = getChainInfo(context.params.chain);
 
-  const text = (await getBalance(chainInfo.rpc, chainInfo.png, chainInfo.community_treasury))
+  const text = (await getBalance(chainInfo.rpc, chainInfo.quack, chainInfo.community_treasury))
     .div(ONE_TOKEN)
     .toString();
 

@@ -2,7 +2,7 @@ import {Chain, ChainId, CHAINS} from '@quackswap/sdk';
 
 export interface ChainInfo {
   chainId: string;
-  png: string;
+  quack: string;
   wrapped_native_token: string;
   mini_chef: string;
   factory: string;
@@ -24,15 +24,15 @@ export function getChainInfo(chainString: string | undefined): ChainInfo {
 
   const chain: Chain = CHAINS[chainId];
 
-  if (!chain.pangolin_is_live) {
-    throw new Error(`Pangolin is not live on chain ${chainString}`);
+  if (!chain.quackswap_is_live) {
+    throw new Error(`QuackSwap is not live on chain ${chainString}`);
   }
 
   const DEFAULT = '';
 
   const chainInfo = {
     chainId: chain.chain_id.toString(),
-    png: chain.contracts?.png ?? DEFAULT,
+    quack: chain.contracts?.quack ?? DEFAULT,
     wrapped_native_token: chain.contracts?.wrapped_native_token ?? DEFAULT,
     mini_chef: chain.contracts?.mini_chef ?? DEFAULT,
     factory: chain.contracts?.factory ?? DEFAULT,

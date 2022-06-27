@@ -1,7 +1,7 @@
 {
-  "name": "pangolin-api",
+  "name": "quackswap-api",
   "version": "0.4.0",
-  "description": "API for reading some key values of Pangolin and the PNG token.",
+  "description": "API for reading some key values of QuackSwap and the QUACK token.",
   "private": true,
   "author": "Dhruba Basu",
   "contributors": [

@@ -1,4 +1,4 @@
-name = "pangolin-api"
+name = "quackswap-api"
 type = "javascript"
 workers_dev = true
 account_id = "michalis"
