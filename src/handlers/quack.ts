@@ -42,7 +42,7 @@ export const supply: Handler = async (_, context) => {
 
   let text;
 
-  if (chainInfo.chainId === '43114') {
+  if (chainInfo.chainId === '199') {
     // Override Avalanche total supply to account for TreasuryVesterProxy logical burns
     text = ONE_TOKEN.mul(230_000_000).toString();
   } else {

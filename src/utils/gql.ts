@@ -1,9 +1,11 @@
 import * as QUERIES from './queries';
 
 export async function getTokenPriceETH(url: string | undefined, address: string): Promise<string> {
+  console.log("🚀 ~ file: gql.ts ~ line 4 ~ getTokenPriceETH ~ address", address)
   const response = await request(QUERIES.TOKEN_PRICE, url, {
     address: address.toLowerCase(),
   });
+  console.log("🚀 ~ file: gql.ts ~ line 7 ~ getTokenPriceETH ~ response", response.toString());
   return response.token.derivedETH;
 }
 
@@ -15,7 +17,7 @@ export async function getPairPriceUSD(url: string | undefined, address: string):
 }
 
 export async function getETHPrice(url: string | undefined): Promise<string> {
-  const response = await request(QUERIES.AVAX_PRICE, url);
+  const response = await request(QUERIES.BTT_PRICE, url);
   return response.bundle.ethPrice;
 }
 

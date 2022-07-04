@@ -1,7 +1,7 @@
 import {Interface, Result} from '@ethersproject/abi';
 import {BigNumber} from '@ethersproject/bignumber';
 import {hexStripZeros, hexZeroPad} from '@ethersproject/bytes';
-import {ERC20_ABI, MINICHEF_ABI, PAIR_ABI, REWARDER_VIA_MULTIPLIER_ABI} from '../constants';
+import {ERC20_ABI, MASTERCHEF_ABI, PAIR_ABI, REWARDER_VIA_MULTIPLIER_ABI} from '../constants';
 
 export function normalizeAddress(address: string): string {
   return hexZeroPad(hexStripZeros(address), 20);
@@ -18,7 +18,7 @@ export async function getStakingTokenAddressFromMiniChefV2(
   let result: string = getStakingTokenAddressFromMiniChefV2Cache[key];
   if (result !== undefined) return result;
 
-  result = normalizeAddress(await call(rpc, MINICHEF_ABI, chefAddress, 'lpToken', [pid]));
+  result = normalizeAddress(await call(rpc, MASTERCHEF_ABI, chefAddress, 'lpToken', [pid]));
 
   getStakingTokenAddressFromMiniChefV2Cache[key] = result;
   return result;
@@ -28,8 +28,8 @@ export async function getStakingTokenAddressesFromMiniChefV2(
   rpc: string,
   chefAddress: string,
 ): Promise<Result> {
-  const iface = new Interface(MINICHEF_ABI);
-  const response = await call(rpc, MINICHEF_ABI, chefAddress, 'lpTokens');
+  const iface = new Interface(MASTERCHEF_ABI);
+  const response = await call(rpc, MASTERCHEF_ABI, chefAddress, 'lpTokens');
   return iface.decodeFunctionResult('lpTokens', response);
 }
 
@@ -37,7 +37,7 @@ export async function getRewardPerSecondFromMiniChefV2(
   rpc: string,
   chefAddress: string,
 ): Promise<BigNumber> {
-  return BigNumber.from(await call(rpc, MINICHEF_ABI, chefAddress, 'rewardPerSecond'));
+  return BigNumber.from(await call(rpc, MASTERCHEF_ABI, chefAddress, 'rewardPerSecond'));
 }
 
 export async function getPoolInfoFromMiniChefV2(
@@ -45,8 +45,8 @@ export async function getPoolInfoFromMiniChefV2(
   chefAddress: string,
   pid: string,
 ): Promise<Result> {
-  const iface = new Interface(MINICHEF_ABI);
-  const response = await call(rpc, MINICHEF_ABI, chefAddress, 'poolInfo', [pid]);
+  const iface = new Interface(MASTERCHEF_ABI);
+  const response = await call(rpc, MASTERCHEF_ABI, chefAddress, 'poolInfo', [pid]);
   return iface.decodeFunctionResult('poolInfo', response);
 }
 
@@ -56,8 +56,8 @@ export async function getPoolInfosFromMiniChefV2(
 ): Promise<
   Array<{accRewardPerShare: BigNumber; lastRewardTime: BigNumber; allocPoint: BigNumber}>
 > {
-  const iface = new Interface(MINICHEF_ABI);
-  const response = await call(rpc, MINICHEF_ABI, chefAddress, 'poolInfos');
+  const iface = new Interface(MASTERCHEF_ABI);
+  const response = await call(rpc, MASTERCHEF_ABI, chefAddress, 'poolInfos');
   const decoded = iface.decodeFunctionResult('poolInfos', response);
   return (decoded[0] as BigNumber[][]).map((data: BigNumber[]) => ({
     accRewardPerShare: data[0],
@@ -67,14 +67,14 @@ export async function getPoolInfosFromMiniChefV2(
 }
 
 export async function getRewarder(rpc: string, chefAddress: string, pid: string): Promise<string> {
-  return normalizeAddress(await call(rpc, MINICHEF_ABI, chefAddress, 'rewarder', [pid]));
+  return normalizeAddress(await call(rpc, MASTERCHEF_ABI, chefAddress, 'rewarder', [pid]));
 }
 
 export async function getTotalAllocationPointsFromMiniChefV2(
   rpc: string,
   chefAddress: string,
 ): Promise<BigNumber> {
-  return BigNumber.from(await call(rpc, MINICHEF_ABI, chefAddress, 'totalAllocPoint'));
+  return BigNumber.from(await call(rpc, MASTERCHEF_ABI, chefAddress, 'totalAllocPoint'));
 }
 
 export async function getRewarderViaMultiplierGetRewardTokens(

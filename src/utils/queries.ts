@@ -35,7 +35,7 @@ query swaps($first: Int, $skip: Int, $orderBy: String) {
 	}
 }`;
 
-export const AVAX_PRICE = `
+export const BTT_PRICE = `
 {
   bundle(id: 1) {
     ethPrice

@@ -4,7 +4,7 @@ export interface ChainInfo {
   chainId: string;
   quack: string;
   wrapped_native_token: string;
-  mini_chef: string;
+  master_chef: string;
   factory: string;
   community_treasury: string;
   treasury_vester: string;
@@ -32,9 +32,9 @@ export function getChainInfo(chainString: string | undefined): ChainInfo {
 
   const chainInfo = {
     chainId: chain.chain_id.toString(),
-    quack: chain.contracts?.quack ?? DEFAULT,
+    quack: chain.contracts?.quack_token ?? DEFAULT,
     wrapped_native_token: chain.contracts?.wrapped_native_token ?? DEFAULT,
-    mini_chef: chain.contracts?.mini_chef ?? DEFAULT,
+    master_chef: chain.contracts?.master_chef ?? DEFAULT,
     factory: chain.contracts?.factory ?? DEFAULT,
 
     community_treasury: chain.contracts?.community_treasury ?? DEFAULT,
@@ -44,9 +44,9 @@ export function getChainInfo(chainString: string | undefined): ChainInfo {
     subgraph_exchange: chain.subgraph?.exchange ?? DEFAULT,
   };
 
-  if (Object.values(chainInfo).includes(DEFAULT)) {
-    throw new Error(`Missing chain info value`);
-  }
+  // if (Object.values(chainInfo).includes(DEFAULT)) {
+  //   throw new Error(`Missing chain info value`);
+  // }
 
   return chainInfo;
 }

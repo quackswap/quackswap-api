@@ -89,7 +89,7 @@ export const aprChef: Handler = async (_, context) => {
   try {
     const stakingTokenAddress = await getStakingTokenAddressFromMiniChefV2(
       chainInfo.rpc,
-      chainInfo.mini_chef,
+      chainInfo.master_chef,
       poolId,
     );
 
@@ -98,7 +98,7 @@ export const aprChef: Handler = async (_, context) => {
 
     const [
       {pairDayDatas},
-      avaxPriceString,
+      bttPriceString,
       derivedQuackString,
       pairValueUSD,
       [token0, token1],
@@ -115,10 +115,10 @@ export const aprChef: Handler = async (_, context) => {
         pairAddress: stakingTokenAddress,
       }),
 
-      // AVAX price in terms of USD
+      // BTT price in terms of USD
       getETHPrice(chainInfo.subgraph_exchange),
 
-      // QUACK price in terms of AVAX
+      // QUACK price in terms of BTT
       getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.quack),
 
       // Get pool USD reserve value
@@ -128,25 +128,25 @@ export const aprChef: Handler = async (_, context) => {
       getPoolTokens(chainInfo.rpc, stakingTokenAddress),
 
       // Current staking reward rate
-      getRewardPerSecondFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+      getRewardPerSecondFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
 
       // Pool information especially allocation points
-      getPoolInfoFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef, poolId),
+      getPoolInfoFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef, poolId),
 
       // Total allocation points
-      getTotalAllocationPointsFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+      getTotalAllocationPointsFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
 
       // Rewarder address
-      getRewarder(chainInfo.rpc, chainInfo.mini_chef, poolId),
+      getRewarder(chainInfo.rpc, chainInfo.master_chef, poolId),
 
       getTotalSupply(chainInfo.rpc, stakingTokenAddress),
 
-      getBalance(chainInfo.rpc, stakingTokenAddress, chainInfo.mini_chef),
+      getBalance(chainInfo.rpc, stakingTokenAddress, chainInfo.master_chef),
     ]);
 
-    const avaxPrice = convertStringToBigNumber(avaxPriceString, 0, 18);
+    const bttPrice = convertStringToBigNumber(bttPriceString, 0, 18);
     const quackPrice = convertStringToBigNumber(derivedQuackString, 0, 18)
-      .mul(avaxPrice)
+      .mul(bttPrice)
       .div(ONE_TOKEN);
 
     // Process additional SuperFarm rewards
@@ -164,6 +164,7 @@ export const aprChef: Handler = async (_, context) => {
         ],
       );
 
+
       const [rewardDecimals, rewardTokenPricesInQUACK] = await Promise.all<BigNumber[], BigNumber[]>([
         Promise.all<BigNumber>(
           superFarmRewardTokens.map(async (address: string) => getDecimals(chainInfo.rpc, address)),
@@ -171,8 +172,8 @@ export const aprChef: Handler = async (_, context) => {
         Promise.all<BigNumber>(
           superFarmRewardTokens.map(async (address: string) => { // eslint-disable-line
             return getTokenPriceETH(chainInfo.subgraph_exchange, address).then(
-              (derivedAVAX: string) =>
-                convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(quackPrice),
+              (derivedBTT: string) =>
+                convertStringToBigNumber(derivedBTT, 0, 18).mul(bttPrice).div(quackPrice),
             );
           }),
         ),
@@ -192,6 +193,7 @@ export const aprChef: Handler = async (_, context) => {
       }
     }
 
+    console.log(quackPrice.toString());
     let stakedQUACK: BigNumber;
     if ([token0, token1].includes(chainInfo.quack.toLowerCase())) {
       const halfPairValueInQUACK: BigNumber = await getBalance(
@@ -201,6 +203,7 @@ export const aprChef: Handler = async (_, context) => {
       );
       stakedQUACK = halfPairValueInQUACK.mul(2).mul(pglStaked).div(pglTotalSupply);
     } else {
+      
       const pairValueInQUACK: BigNumber = convertStringToBigNumber(pairValueUSD, 0, 18)
         .mul(ONE_TOKEN)
         .div(quackPrice);
@@ -208,8 +211,8 @@ export const aprChef: Handler = async (_, context) => {
     }
 
     const poolRewardPerSecInQUACK: BigNumber = (rewardPerSecond as BigNumber)
-      .mul(poolInfo.allocPoint)
-      .div(totalAllocPoints);
+    .mul(poolInfo.allocPoint)
+    .div(totalAllocPoints);
     const stakingAPR: BigNumber = stakedQUACK.isZero()
       ? ZERO
       : poolRewardPerSecInQUACK
@@ -230,14 +233,19 @@ export const aprChef: Handler = async (_, context) => {
     }
 
     const fees = swapVolumeUSD.mul(365).div(pairDayDatas.length).mul(3).div(1000);
+    console.log("🚀 ~ file: quackswap.ts ~ line 236 ~ constaprChef:Handler= ~ fees", fees.toString())
     const averageLiquidityUSD = liquidityUSD.div(pairDayDatas.length);
     const swapFeeAPR = averageLiquidityUSD.isZero() ? ZERO : fees.mul(100).div(averageLiquidityUSD);
+    console.log("🚀 ~ file: quackswap.ts ~ line 238 ~ constaprChef:Handler= ~ averageLiquidityUSD", averageLiquidityUSD.toString())
+    console.log("🚀 ~ file: quackswap.ts ~ line 238 ~ constaprChef:Handler= ~ swapFeeAPR", swapFeeAPR.toString())
     const combinedAPR = stakingAPR.add(swapFeeAPR);
 
     aprs.swapFeeApr = swapFeeAPR.toNumber();
     aprs.stakingApr = stakingAPR.toNumber();
     aprs.combinedApr = combinedAPR.toNumber();
-  } catch {}
+  } catch(e) {
+    console.error(e);
+  }
 
   return send(200, aprs, {
     'Cache-Control': 'public,s-maxage=120',
@@ -260,36 +268,36 @@ export const aprChefMultiple: Handler = async (_, context) => {
 
   // Singular data
   const [
-    _avaxPriceString,
+    _bttPriceString,
     _derivedQuackString,
     _lpTokens,
     poolInfos,
     rewardPerSecond,
     totalAllocPoints,
   ] = await Promise.all([
-    // Variable: _avaxPriceString
+    // Variable: _bttPriceString
     getETHPrice(chainInfo.subgraph_exchange),
 
     // Variable: _derivedQuackString
     getTokenPriceETH(chainInfo.subgraph_exchange, chainInfo.quack),
 
     // Variable: _lpTokens
-    getStakingTokenAddressesFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+    getStakingTokenAddressesFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
 
     // Variable: poolInfos
-    getPoolInfosFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+    getPoolInfosFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
 
     // Variable: rewardPerSecond
-    getRewardPerSecondFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+    getRewardPerSecondFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
 
     // Variable: totalAllocPoints
-    getTotalAllocationPointsFromMiniChefV2(chainInfo.rpc, chainInfo.mini_chef),
+    getTotalAllocationPointsFromMiniChefV2(chainInfo.rpc, chainInfo.master_chef),
   ]);
 
   // Format singular data
-  const avaxPrice: BigNumber = convertStringToBigNumber(_avaxPriceString, 0, 18);
+  const bttPrice: BigNumber = convertStringToBigNumber(_bttPriceString, 0, 18);
   const quackPrice: BigNumber = convertStringToBigNumber(_derivedQuackString, 0, 18)
-    .mul(avaxPrice)
+    .mul(bttPrice)
     .div(ONE_TOKEN);
   const lpTokens: string[] = _lpTokens[0];
 
@@ -320,13 +328,13 @@ export const aprChefMultiple: Handler = async (_, context) => {
         getPoolTokens(chainInfo.rpc, stakingTokenAddress),
 
         // Variable: rewarderAddress
-        getRewarder(chainInfo.rpc, chainInfo.mini_chef, poolId),
+        getRewarder(chainInfo.rpc, chainInfo.master_chef, poolId),
 
         // Variable: pglTotalSupply
         getTotalSupply(chainInfo.rpc, stakingTokenAddress),
 
         // Variable: pglStaked
-        getBalance(chainInfo.rpc, stakingTokenAddress, chainInfo.mini_chef),
+        getBalance(chainInfo.rpc, stakingTokenAddress, chainInfo.master_chef),
       ]);
 
       // Process additional SuperFarm rewards
@@ -354,8 +362,8 @@ export const aprChefMultiple: Handler = async (_, context) => {
           Promise.all<BigNumber>(
             superFarmRewardTokens.map(async (address: string) => { // eslint-disable-line
               return getTokenPriceETH(chainInfo.subgraph_exchange, address).then(
-                (derivedAVAX: string) =>
-                  convertStringToBigNumber(derivedAVAX, 0, 18).mul(avaxPrice).div(quackPrice),
+                (derivedBTT: string) =>
+                  convertStringToBigNumber(derivedBTT, 0, 18).mul(bttPrice).div(quackPrice),
               );
             }),
           ),
@@ -435,7 +443,7 @@ export const stakingTokenAddresses: Handler = async (_, context) => {
 
   const stakingTokenAddresses = await getStakingTokenAddressesFromMiniChefV2(
     chainInfo.rpc,
-    chainInfo.mini_chef,
+    chainInfo.master_chef,
   );
   return send(200, stakingTokenAddresses?.[0], {
     'Cache-Control': 'public,s-maxage=216000',
