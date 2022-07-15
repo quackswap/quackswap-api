@@ -1,11 +1,9 @@
 import * as QUERIES from './queries';
 
 export async function getTokenPriceETH(url: string | undefined, address: string): Promise<string> {
-  console.log("🚀 ~ file: gql.ts ~ line 4 ~ getTokenPriceETH ~ address", address)
   const response = await request(QUERIES.TOKEN_PRICE, url, {
     address: address.toLowerCase(),
   });
-  console.log("🚀 ~ file: gql.ts ~ line 7 ~ getTokenPriceETH ~ response", response.toString());
   return response.token.derivedETH;
 }
 
