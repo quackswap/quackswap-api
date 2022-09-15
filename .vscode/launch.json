@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Api",
+      "runtimeExecutable": "node",
+      "program": "${workspaceRoot}/bin/index.js",
+      "cwd": "${workspaceRoot}",
+      "envFile": "${workspaceFolder}/.env",
+      "outputCapture": "std",
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true,
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Api Prod",
+      "runtimeExecutable": "node",
+      "program": "${workspaceRoot}/bin/index.js",
+      "cwd": "${workspaceRoot}",
+      "envFile": "${workspaceFolder}/.env.production",
+      "outputCapture": "std",
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true,
+    },
+  ]
+}

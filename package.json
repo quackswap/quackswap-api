@@ -1,0 +1,41 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./bin/index.js",
+    "start:dev": "NODE_ENV=development nodemon --experimental-json-modules ./bin/index.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@ethersproject/contracts": "^5.6.2",
+    "@ethersproject/providers": "^5.6.8",
+    "@ethersproject/solidity": "^5.6.1",
+    "@quackswap/sdk": "^1.0.0",
+    "@koa/router": "^10.1.1",
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "http-status-codes": "^2.1.4",
+    "https": "^1.0.0",
+    "immutable": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "kcors": "^2.2.2",
+    "koa": "^2.13.3",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compose": "^4.1.0",
+    "koa-morgan": "^1.0.1",
+    "lodash": "^4.17.21",
+    "lodash.partial": "^4.2.1",
+    "node-fetch": "^3.2.10",
+    "stream": "0.0.2",
+    "uuid": "^8.3.2",
+    "web3": "^1.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
