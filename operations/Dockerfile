@@ -1,4 +1,4 @@
-FROM node:14.7.0 AS build
+FROM node:17.0.1 AS build
 
 # Install essential tools
 RUN apt-get -qq update && \
@@ -24,7 +24,7 @@ RUN rm -rf .npmrc
 
 RUN yarn cache clean
 
-FROM node:14.7.0-alpine
+FROM node:17.0.1-alpine
 
 COPY --from=build /usr/src/api /api
 
