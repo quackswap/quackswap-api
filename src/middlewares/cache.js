@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-expressions */
 import {StatusCodes} from 'http-status-codes'
-import {createRedisClient} from '../../distributed/index.js'
-import {redLock} from '../../distributed/locks/index.js'
-import logger from '../../common/logger.js'
+import {createRedisClient} from '../distributed/index.js'
+import redLock from '../distributed/locks/index.js'
+import logger from '../common/logger/index.js'
 
 let _cache
 let _lock

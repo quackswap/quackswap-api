@@ -1,4 +1,4 @@
-// import cacheMiddleware from '../middlewares/cache.js'
+import cacheMiddleware from '../middlewares/cache.js'
 
 const setup = (router, routes) => {
   routes.forEach(route => {
@@ -13,7 +13,7 @@ const setup = (router, routes) => {
       if(cache) {
         middlewares = [
           ...middlewares,
-          // cacheMiddleware(endpoint, cache.props, cache.ttl)
+          cacheMiddleware(endpoint, cache.props, cache.ttl)
         ]
       }
 
