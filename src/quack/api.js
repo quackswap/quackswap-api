@@ -4,8 +4,7 @@ import {getBalance, getTotalSupply} from '../utils/calls.js'
 import {ONE_TOKEN} from '../utils/constants.js'
 import * as gql from '../utils/gql.js'
 import * as QUERIES from '../utils/queries.js'
-
-// import logger from '../../common/logger.js'
+import logger from '../common/logger/index.js'
 
 export const getTvl = async ctx => {
   try {
@@ -21,7 +20,7 @@ export const getTvl = async ctx => {
     createBasicResponse(ctx, tvl)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -40,7 +39,7 @@ export const getVolume = async ctx => {
     createBasicResponse(ctx, volume)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -56,7 +55,7 @@ export const getSupply = async ctx => {
     createBasicResponse(ctx, supply)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -72,7 +71,7 @@ export const getSupplyWhole = async ctx => {
     createBasicResponse(ctx, supply)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -87,7 +86,7 @@ export const getCirculating = async ctx => {
     createBasicResponse(ctx, res)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -104,7 +103,7 @@ export const getCirculatingWhole = async ctx => {
     createBasicResponse(ctx, res)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }

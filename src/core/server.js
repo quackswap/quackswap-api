@@ -7,18 +7,11 @@ import fs from 'fs'
 
 import setupRoutes from './router.js'
 import setupMiddlewares from '../middlewares/index.js'
-// import {redis} from '../../data/index.js'
-// import logger from '../../common/logger'
+import logger from '../common/logger/index.js'
 
 const start = async routes => {
   const app = new Koa()
   const router = setupRoutes(Router(), routes)
-
-  // redis.initDB(
-  //   process.env.REDIS_HOST,
-  //   process.env.REDIS_PORT,
-  //   process.env.REDIS_PASSWORD
-  // )
 
   app
     .use(setupMiddlewares())
@@ -33,16 +26,14 @@ const start = async routes => {
     https
       .createServer(credentials, app.callback())
       .listen(process.env.SERVER_HTTPS_PORT, () => {
-        // logger.info(`Koa https server listening on port ${process.env.SERVER_HTTPS_PORT} and worker ${process.pid}`)
-        console.log(`Koa https server listening on port ${process.env.SERVER_HTTPS_PORT} and worker ${process.pid}`)
+        logger.info(`Koa https server listening on port ${process.env.SERVER_HTTPS_PORT} and worker ${process.pid}`)
       })
   }
   
   http
     .createServer(app.callback())
     .listen(process.env.SERVER_PORT, () => {
-      // logger.info(`Koa http server listening on port ${process.env.SERVER_PORT}`)
-      console.log(`Koa http server listening on port ${process.env.SERVER_PORT}`)
+      logger.info(`Koa http server listening on port ${process.env.SERVER_PORT}`)
     })
 }
 

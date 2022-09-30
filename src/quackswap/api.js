@@ -20,8 +20,7 @@ import {ONE_TOKEN, ZERO_ADDRESS, ZERO} from '../utils/constants.js'
 import {getETHPrice, getPairPriceUSD, getTokenPriceETH} from '../utils/gql.js';
 import * as gql from '../utils/gql.js'
 import * as QUERIES from '../utils/queries.js'
-
-// import logger from '../../common/logger.js'
+import logger from '../common/logger/index.js'
 
 export const getAddresses = async ctx => {
   try {
@@ -46,7 +45,7 @@ export const getAddresses = async ctx => {
     createBasicResponse(ctx, number_addresses)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -67,7 +66,7 @@ export const getAverage = async ctx => {
     createBasicResponse(ctx, average)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -83,7 +82,7 @@ export const aprLegacy = async ctx => {
     createBasicResponse(ctx, aprs)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -255,7 +254,7 @@ export const getAprChef = async ctx => {
     createBasicResponse(ctx, aprs)
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
@@ -273,7 +272,7 @@ export const getStakingTokenAddresses = async ctx => {
     createBasicResponse(ctx, stakingTokenAddresses?.[0])
   }
   catch(error) {
-    // logger.error(`Error : ${error.message}`)
+    logger.error(`Error : ${error.message}`)
     throwWithError(ctx, 'Internal Server Error')
   }
 }
